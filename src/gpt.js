@@ -52,6 +52,27 @@ const Completion = class {
         console.log(data);
         return data;
     }
+    async moderateNote(prompt, user_id) {
+        const END_POINT = "https://s51ue6kvx7.execute-api.us-east-1.amazonaws.com/dev/";
+        console.log(prompt);
+        const response = await fetch(END_POINT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "prompt": prompt,
+                "user_id": user_id,
+            })
+        })
+        let data = await response.json();
+
+        console.log(data);
+        return data;
+    }
+    async moderateReply(prompt, user_id) {
+        //リプライの修正機能を書く
+    }
 }
 
 const ModerateWithLlmButton = class {
@@ -63,7 +84,7 @@ const ModerateWithLlmButton = class {
         this.button.className = "exButton";
         this.button.addEventListener("click", async () => {
             const completion = new Completion();
-            const newText = await completion.sendPromptWithWrapper(textArea.value);
+            const newText = await completion.moderateNote(textArea.value, "test");
             textArea.value = newText;
             textArea.dispatchEvent(new Event("input", { bubbles: true }));
         });
