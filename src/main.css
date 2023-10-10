@@ -12,3 +12,7 @@
     color: #fff;
     background-color: rgb(134, 179, 0);
 }
+
+.exButton:disabled {
+    opacity: 0.5;
+}
