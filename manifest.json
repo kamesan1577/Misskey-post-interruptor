@@ -31,8 +31,12 @@
     },
     "web_accessible_resources": [
         {
-          "resources": [ "public/*" ],
-          "matches": [ "https://*/*" ]
+            "resources": [
+                "public/*"
+            ],
+            "matches": [
+                "https://*/*"
+            ]
         }
-      ]
+    ]
 }

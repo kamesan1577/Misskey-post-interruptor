@@ -7,7 +7,7 @@ const Completion = class {
     const BASE_URL =
       "https://b0861yd058.execute-api.us-east-1.amazonaws.com/dev/";
     const END_POINT = BASE_URL + "moderations";
-    console.log(prompt);
+    console.log(prompt, user_id);
     const response = await fetch(END_POINT, {
       method: "POST",
       headers: {
@@ -28,46 +28,62 @@ const Completion = class {
   }
 };
 
-const ModerateWithLlmButton = class {
+class ModerateWithLlmButton {
   constructor(textArea) {
+    this.textArea = textArea;
     this.button = document.createElement("button");
     this.buttonName = "修正";
-    this.buttonValue = textArea.value;
     this.button.textContent = this.buttonName;
     this.button.className = "exButton";
     this.button.disabled = true;
-    // img要素の作成
+
+  }
+
+  async init() {
     const img = document.createElement("img");
     img.src = chrome.runtime.getURL("public/parrot.gif");
     img.style.display = "none";
     img.style.width = "20px";
     img.style.height = "20px";
-    
-    this.button.appendChild(img);
+    this.button.appendChild(img); // 初期化
 
-    // this.button.style.display = "none";
-
+    const userId = await this.setUser();
     this.button.addEventListener("click", async () => {
-        textArea.disabled = true;
-        this.button.disabled = true;
-        this.button.textContent = "";
-        img.style.display = "block";
-        this.button.appendChild(img);
-        
-        try {
-            const completion = new Completion();
-            const newText = await completion.moderateNote(textArea.value, "test");
-            textArea.value = newText;
-        } catch (error) {}
+      this.textArea.disabled = true;
+      this.button.disabled = true;
+      this.button.textContent = "";
+      img.style.display = "block";
+      this.button.appendChild(img);
 
-        textArea.dispatchEvent(new Event("input", { bubbles: true }));
-        textArea.disabled = false;
-        this.button.disabled = false;
-        this.button.textContent = this.buttonName;
-        img.style.display = "none";
+      try {
+        const completion = new Completion();
+        const newText = await completion.moderateNote(this.textArea.value, userId);
+        this.textArea.value = newText;
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.textArea.dispatchEvent(new Event("input", { bubbles: true }));
+      this.textArea.disabled = false;
+      this.button.disabled = false;
+      this.button.textContent = this.buttonName;
+      img.style.display = "none";
     });
+  }
+
+  async setUser() {
+    const userId = await chrome.storage.local.get(["jisshu-user-id"]);
+    console.log(userId);
+    if (userId === undefined) {
+      const uuid = crypto.randomUUID();
+      await chrome.storage.local.set({ "jisshu-user-id": uuid });
+      return this.setUser();
+    } else {
+      return userId["jisshu-user-id"];
     }
-    setButtonDisabled(isDisabled) {
+  }
+
+  setButtonDisabled(isDisabled) {
     this.button.disabled = isDisabled;
-    }
-};
+  }
+}

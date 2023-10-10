@@ -12,6 +12,9 @@ const observer = new MutationObserver((mutations) => {
             buttonWrapper.className = "button-wrapper";
             const buttons = [new ModerateWithLlmButton(textArea)];
             for (const button of buttons) {
+              button.init();
+            }
+            for (const button of buttons) {
               buttonWrapper.appendChild(button.button);
             }
             const form = node.querySelector("footer[class=xkr7J]");
