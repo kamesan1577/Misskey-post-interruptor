@@ -8,6 +8,11 @@ const observer = new MutationObserver((mutations) => {
                     );
                     // console.log(textArea);
                     if (textArea) {
+                        // console.log(node);
+                        const originalNoteButton = node.querySelector("button._button.xBTsK");
+                        if (originalNoteButton) {
+                            const noteButton = new NoteButton(originalNoteButton, textArea);
+                        }
                         const buttonWrapper = document.createElement("div");
                         buttonWrapper.className = "button-wrapper";
                         const buttons = [new ModerateWithLlmButton(textArea)];

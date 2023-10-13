@@ -1,38 +1,4 @@
-const Completion = class {
-    constructor() {
-        this.END_POINT = "https://api.openai.com/v1";
-    }
-
-    async moderateNote(prompt, user_id) {
-        const BASE_URL =
-            "https://b0861yd058.execute-api.us-east-1.amazonaws.com/dev/";
-        const END_POINT = BASE_URL + "moderations";
-        console.log(prompt, user_id);
-        try {
-            const response = await fetch(END_POINT, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    prompt: prompt,
-                    user_id: user_id,
-                }),
-            });
-            const data = await response.json();
-            console.log(data);
-            return data.response;
-        } catch (error) {
-            console.log(error);
-            return prompt;
-        }
-
-    }
-    async moderateReply(prompt, user_id) {
-        //リプライの修正機能を書く
-    }
-};
-
+// 投稿修正ボタン
 class ModerateWithLlmButton {
     constructor(textArea) {
         this.textArea = textArea;
@@ -42,6 +8,7 @@ class ModerateWithLlmButton {
         this.button.className = "exButton";
         this.button.disabled = true;
 
+        this.END_POINT = "https://api.openai.com/v1";
     }
 
     async init() {
@@ -52,7 +19,7 @@ class ModerateWithLlmButton {
         img.style.height = "20px";
         this.button.appendChild(img); // 初期化
 
-        const userId = await this.setUser();
+        const userId = await fetchUser();
         this.button.addEventListener("click", async () => {
             this.textArea.disabled = true;
             this.button.disabled = true;
@@ -60,8 +27,7 @@ class ModerateWithLlmButton {
             img.style.display = "block";
             this.button.appendChild(img);
 
-            const completion = new Completion();
-            const newText = await completion.moderateNote(this.textArea.value, userId);
+            const newText = await moderatePost(this.textArea.value, userId);
             this.textArea.value = newText;
 
 
@@ -73,17 +39,6 @@ class ModerateWithLlmButton {
         });
     }
 
-    async setUser() {
-        const userId = await chrome.storage.local.get(["jisshu-user-id"]);
-        console.log(userId);
-        if (typeof userId["jisshu-user-id"] === "undefined") {
-            const uuid = crypto.randomUUID();
-            await chrome.storage.local.set({ "jisshu-user-id": uuid });
-            return this.setUser();
-        } else {
-            return userId["jisshu-user-id"];
-        }
-    }
 
     setButtonDisabled(isDisabled) {
         this.button.disabled = isDisabled;
