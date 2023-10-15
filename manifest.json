@@ -12,6 +12,7 @@
             "js": [
                 "src/api.js",
                 "src/user.js",
+                "src/suggestBox.js",
                 "src/noteButton.js",
                 "src/gpt.js",
                 "src/ogya.js",

@@ -19,17 +19,15 @@ class ModerateWithLlmButton {
         img.style.height = "20px";
         this.button.appendChild(img); // 初期化
 
-        const userId = await fetchUser();
         this.button.addEventListener("click", async () => {
             this.textArea.disabled = true;
             this.button.disabled = true;
             this.button.textContent = "";
             img.style.display = "block";
             this.button.appendChild(img);
-
+            const userId = await fetchUser();
             const newText = await moderatePost(this.textArea.value, userId);
             this.textArea.value = newText;
-
 
             this.textArea.dispatchEvent(new Event("input", { bubbles: true }));
             this.textArea.disabled = false;
