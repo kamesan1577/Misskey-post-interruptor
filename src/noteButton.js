@@ -41,6 +41,7 @@ const NoteButton = class {
             else {
                 this.suggestBox.hideSuggestion();
                 console.log("修正提案はありませんでした");
+                this.setCanPost(true);
 
                 // イベントリスナーを殺してからクリックする(無限ループするので)
                 this.button.removeEventListener("click", this.clickHandler, true);
