@@ -8,19 +8,29 @@ const observer = new MutationObserver((mutations) => {
                     );
                     // console.log(textArea);
                     if (textArea) {
+                        // console.log(node);
+                        const suggestBox = new SuggestBox(textArea);
+                        const originalNoteButton = node.querySelector("button._button.xBTsK");
+                        if (originalNoteButton) {
+                            const noteButton = new NoteButton(originalNoteButton, textArea, suggestBox);
+                            suggestBox.setNoteButton(noteButton);
+                        }
+
+                        const form = node.querySelector("div.xpDI4");
+                        if (form) {
+                            form.insertBefore(suggestBox.box, textArea.parentNode);
+                        }
                         const buttonWrapper = document.createElement("div");
                         buttonWrapper.className = "button-wrapper";
                         const buttons = [new ModerateWithLlmButton(textArea)];
                         for (const button of buttons) {
                             button.init();
-                        }
-                        for (const button of buttons) {
                             buttonWrapper.appendChild(button.button);
                         }
-                        const form = node.querySelector("footer[class=xkr7J]");
-                        // console.log(form);
-                        if (form) {
-                            form.appendChild(buttonWrapper);
+                        const footer = node.querySelector("footer[class=xkr7J]");
+                        // console.log(footer);
+                        if (footer) {
+                            footer.appendChild(buttonWrapper);
                         }
 
                         // テキストエリアに文字が入力された時にボタンを活性化
