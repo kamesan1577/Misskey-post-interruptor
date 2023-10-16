@@ -1,5 +1,5 @@
-// const BASE_URL = "https://b0861yd058.execute-api.us-east-1.amazonaws.com/dev/";
-const BASE_URL = "http://localhost:8000/";
+const BASE_URL = "https://b0861yd058.execute-api.us-east-1.amazonaws.com/dev/";
+// const BASE_URL = "http://localhost:8000/";
 
 //TODO クラスにまとめる
 
