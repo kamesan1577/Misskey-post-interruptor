@@ -9,7 +9,9 @@ const NoteButton = class {
         console.log("NoteButton constructor called");
         // 投稿前に実行する処理
         this.clickHandler = this.clickHandler.bind(this);
+        this.ctlEnterHandler = this.ctlEnterHandler.bind(this);
         this.button.addEventListener("click", this.clickHandler, true);
+        this.textArea.addEventListener("keydown", this.ctlEnterHandler, true);
     }
 
     async clickHandler(event) {
@@ -24,7 +26,7 @@ const NoteButton = class {
         event.preventDefault();
 
         this.button.disabled = true;
-        const targetElement = event.target.closest("button._button.xBTsK");
+        const targetElement = this.button;
         if (targetElement) {
             this.isProcessing = true;
             console.log("noteButton clicked");
@@ -51,6 +53,18 @@ const NoteButton = class {
                 this.button.addEventListener("click", this.clickHandler, true);
 
                 this.isProcessing = false;
+            }
+        }
+    }
+    async ctlEnterHandler(event) {
+        if (event.ctrlKey && event.key === "Enter") {
+            console.log("Ctrl + Enter detected.");
+            if (this.isProcessing | this.textArea.value.trim() === "") {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            else {
+                await this.clickHandler(event);
             }
         }
     }

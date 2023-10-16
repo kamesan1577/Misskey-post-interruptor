@@ -26,6 +26,7 @@ const SuggestBox = class {
             this.noteButton.setCanPost(true);
             // sendSuggestAcceptance(true);
             this.hideSuggestion();
+            textArea.focus();
         });
         this.info.appendChild(this.acceptButton);
 
@@ -38,6 +39,7 @@ const SuggestBox = class {
             // sendSuggestAcceptance(false);
             console.log(NoteButton.canPost);
             this.hideSuggestion();
+            textArea.focus();
         });
         this.info.appendChild(this.rejectButton);
 
