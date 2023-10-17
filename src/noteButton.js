@@ -6,6 +6,7 @@ const NoteButton = class {
         this.canPost = false;
         this.textArea = textArea;
         this.suggestBox = suggestBox;
+        this.suggestions = [];
         console.log("NoteButton constructor called");
         // 投稿前に実行する処理
         this.clickHandler = this.clickHandler.bind(this);
@@ -34,7 +35,8 @@ const NoteButton = class {
             const baseText = this.textArea.value;
             const userId = await fetchUser();
 
-            if (await isRequiredModeration(baseText, userId)) {
+            this.setSuggestions(await getSuggestions(baseText, userId));
+            if (isRequiredModeration(this.getSuggestions())) {
                 const newText = await moderatePost(baseText, userId);
                 console.log("修正提案があります");
                 this.suggestBox.setSuggestion(newText);
@@ -71,6 +73,12 @@ const NoteButton = class {
     setCanPost(canPost) {
         this.button.disabled = false;
         this.canPost = canPost;
+    }
+    setSuggestions(suggestions) {
+        this.suggestions = suggestions;
+    }
+    getSuggestions() {
+        return this.suggestions;
     }
 
 }

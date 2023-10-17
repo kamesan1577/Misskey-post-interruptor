@@ -1,6 +1,7 @@
 // 提案時の情報を表示する要素
 const SuggestBox = class {
-    constructor(textArea) {
+    constructor(textArea, noteButton) {
+        this.noteButton = noteButton;
         // 親のdiv
         this.box = document.createElement("div");
         this.box.className = "suggest-box";
@@ -20,11 +21,17 @@ const SuggestBox = class {
         this.acceptButton = document.createElement("button");
         this.acceptButton.className = "exButton";
         this.acceptButton.textContent = "受け入れる";
-        this.acceptButton.addEventListener("click", () => {
+        this.acceptButton.addEventListener("click", async () => {
+            if (this.value) {
+                if (this.noteButton) {
+                    const suggestions = this.noteButton.getSuggestions();
+                    console.log("Send suggestion acceptance");
+                    sendSuggestAcceptance(true, await fetchUser(), textArea.value, suggestions);
+                }
+            }
             textArea.value = this.value;
             textArea.dispatchEvent(new Event("input", { bubbles: true }));
             this.noteButton.setCanPost(true);
-            // sendSuggestAcceptance(true);
             this.hideSuggestion();
             textArea.focus();
         });
@@ -34,9 +41,15 @@ const SuggestBox = class {
         this.rejectButton = document.createElement("button");
         this.rejectButton.className = "exButton";
         this.rejectButton.textContent = "拒否する";
-        this.rejectButton.addEventListener("click", () => {
+        this.rejectButton.addEventListener("click", async () => {
             this.noteButton.setCanPost(true);
-            // sendSuggestAcceptance(false);
+            if (this.value) {
+                if (this.noteButton) {
+                    const suggestions = this.noteButton.getSuggestions();
+                    console.log("Send suggestion rejection");
+                    sendSuggestAcceptance(false, await fetchUser(), textArea.value, suggestions);
+                }
+            }
             console.log(NoteButton.canPost);
             this.hideSuggestion();
             textArea.focus();
