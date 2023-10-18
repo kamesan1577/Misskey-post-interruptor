@@ -1,4 +1,11 @@
-const BASE_URL = "https://b0861yd058.execute-api.us-east-1.amazonaws.com/dev/";
+let BASE_URL = "https://b0861yd058.execute-api.us-east-1.amazonaws.com/dev/";
+chrome.storage.local.get(["endpoint"], (result) => {
+    if (result.endpoint) {
+        BASE_URL = result.endpoint;
+        console.log("endpoint: ", BASE_URL);
+    }
+})
+
 // const BASE_URL = "http://localhost:8000/";
 
 //TODO クラスにまとめる
@@ -65,7 +72,7 @@ async function getSuggestions(text, user_id) {
     }
 }
 
-async function sendSuggestAcceptance(is_accepted, user_id, original_text, hidden_texts) {
+async function sendSuggestAcceptance(is_accepted, user_id, original_text, hidden_texts, is_edited_by_user = false) {
     const END_POINT = BASE_URL + "poc/suggest-acceptance-collection";
     try {
         const response = await fetch(END_POINT, {
@@ -76,6 +83,7 @@ async function sendSuggestAcceptance(is_accepted, user_id, original_text, hidden
             body: JSON.stringify({
                 user_id: user_id,
                 is_accepted: is_accepted,
+                is_edited_by_user: is_edited_by_user,
                 original_text: original_text,
                 hidden_texts: hidden_texts,
             }),

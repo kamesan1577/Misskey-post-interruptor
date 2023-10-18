@@ -24,9 +24,17 @@ const SuggestBox = class {
         this.acceptButton.addEventListener("click", async () => {
             if (this.value) {
                 if (this.noteButton) {
-                    const suggestions = this.noteButton.getSuggestions();
-                    console.log("Send suggestion acceptance");
-                    sendSuggestAcceptance(true, await fetchUser(), textArea.value, suggestions);
+                    if (this.value != this.textBox.value) {
+                        this.value = this.textBox.value;
+                        const suggestions = this.noteButton.getSuggestions();
+                        console.log("Send suggestion acceptance: edited by user");
+                        sendSuggestAcceptance(true, await fetchUser(), textArea.value, suggestions, true);
+                    }
+                    else {
+                        const suggestions = this.noteButton.getSuggestions();
+                        console.log("Send suggestion acceptance: not edited by user");
+                        sendSuggestAcceptance(true, await fetchUser(), textArea.value, suggestions);
+                    }
                 }
             }
             textArea.value = this.value;
@@ -57,7 +65,8 @@ const SuggestBox = class {
         this.info.appendChild(this.rejectButton);
 
         // 提案テキスト
-        this.textBox = document.createElement("div");
+        this.textBox = document.createElement("input");
+        this.textBox.type = "text";
         this.textBox.className = "suggest-text";
         this.box.appendChild(this.textBox);
 
@@ -67,7 +76,7 @@ const SuggestBox = class {
     }
     setSuggestion(value) {
         this.value = value;
-        this.textBox.textContent = value;
+        this.textBox.value = value;
         this.box.style.display = "block";
     }
     hideSuggestion() {
