@@ -21,8 +21,12 @@ const saveEndpoint = () => {
         document.getElementById("display_endpoint").innerText = result.endpoint;
     });
 }
-
+const setDefault = () => {
+    document.getElementById("endpoint").value = "https://b0861yd058.execute-api.us-east-1.amazonaws.com/dev/";
+    saveEndpoint();
+}
 // document.getElementById("token_save_button").addEventListener("click", saveToken);
 document.getElementById("endpoint_save_button").addEventListener("click", saveEndpoint);
+document.getElementById("endpoint_default_button").addEventListener("click", setDefault);
 
 
