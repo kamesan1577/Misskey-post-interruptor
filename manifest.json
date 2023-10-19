@@ -11,6 +11,7 @@
             ],
             "js": [
                 "src/api.js",
+                "src/timeLine.js",
                 "src/user.js",
                 "src/suggestBox.js",
                 "src/noteButton.js",
@@ -24,7 +25,8 @@
         }
     ],
     "permissions": [
-        "storage"
+        "storage",
+        "webRequest"
     ],
     "host_permissions": [
         "<all_urls>"
@@ -43,5 +45,8 @@
                 "http://localhost/*"
             ]
         }
-    ]
+    ],
+    "background": {
+        "service_worker": "src/service_worker.js"
+    }
 }
