@@ -43,6 +43,7 @@
     background: transparent;
     color: var(--fg);
     font-family: inherit;
+    resize: vertical;
 }
 
 .suggest-announce-text {

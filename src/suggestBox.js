@@ -65,8 +65,7 @@ const SuggestBox = class {
         this.info.appendChild(this.rejectButton);
 
         // 提案テキスト
-        this.textBox = document.createElement("input");
-        this.textBox.type = "text";
+        this.textBox = document.createElement("textarea");
         this.textBox.className = "suggest-text";
         this.box.appendChild(this.textBox);
 
