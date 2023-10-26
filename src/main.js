@@ -69,12 +69,3 @@ documentObserver.observe(document.body, {
     characterData: true,
 });
 
-
-
-chrome.storage.local.get(["misskey-token"], (result) => {
-    if (!result["misskey-token"]) {
-        const account = JSON.parse(localStorage.getItem("account"));
-        const token = account["token"];
-        chrome.storage.local.set({ "misskey-token": token });
-    }
-});
