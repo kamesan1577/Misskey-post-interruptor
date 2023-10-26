@@ -11,7 +11,7 @@
             ],
             "js": [
                 "src/api.js",
-                "src/timeLine.js",
+                "src/timeLineEditor.js",
                 "src/user.js",
                 "src/suggestBox.js",
                 "src/noteButton.js",

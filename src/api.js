@@ -72,6 +72,31 @@ async function getSuggestions(text, user_id) {
     }
 }
 
+// タイムラインの検閲
+async function getTimeLineRedaction(texts, user_id) {
+    const texts = texts.map((text) => text.replace(/\n/g, ""));
+    const END_POINT = BASE_URL + "redactions";
+    try {
+        const response = await fetch(END_POINT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                prompts: texts,
+                user_id: user_id,
+            }),
+        });
+        const data = await response.json();
+        console.log(data);
+        return data.response;
+    } catch (error) {
+        alert("エラーが発生しました。しばらくしてから再度お試しください。");
+        console.log(error);
+        return [];
+    }
+}
+
 async function sendSuggestAcceptance(is_accepted, user_id, original_text, hidden_texts, is_edited_by_user = false) {
     const END_POINT = BASE_URL + "poc/suggest-acceptance-collection";
     try {
@@ -95,3 +120,4 @@ async function sendSuggestAcceptance(is_accepted, user_id, original_text, hidden
         console.log(error);
     }
 }
+

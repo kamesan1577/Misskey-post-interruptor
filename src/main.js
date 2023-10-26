@@ -1,8 +1,12 @@
-const observer = new MutationObserver((mutations) => {
+let timeLineEditors = [];
+
+const documentObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
         if (mutation.addedNodes.length) {
             mutation.addedNodes.forEach((node) => {
                 if (node.querySelector) {
+
+                    // 書き手機能のDOM取得
                     const textArea = node.querySelector(
                         "textarea[data-cy-post-form-text]"
                     );
@@ -40,17 +44,32 @@ const observer = new MutationObserver((mutations) => {
                             });
                         });
                     }
+
+                    const timeLines = node.querySelectorAll("div.xzSZs.xwehs");
+                    if (timeLines) {
+                        // timelineの数が変わっていたら
+                        if (timeLines.length !== timeLineEditors.length) {
+                            timeLineEditors = [];
+                            timeLines.forEach((timeLine) => {
+                                timeLineEditors.push(new TimeLineEditor(timeLine));
+                            });
+                            console.log(timeLineEditors);
+                        }
+                    }
                 }
             });
         }
     });
 });
 
-observer.observe(document.body, {
+
+documentObserver.observe(document.body, {
     childList: true,
     subtree: true,
     characterData: true,
 });
+
+
 
 chrome.storage.local.get(["misskey-token"], (result) => {
     if (!result["misskey-token"]) {
