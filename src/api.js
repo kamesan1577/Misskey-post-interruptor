@@ -73,9 +73,12 @@ async function getSuggestions(text, user_id) {
 }
 
 // タイムラインの検閲
-async function getTimeLineRedaction(texts, user_id) {
-    const texts = texts.map((text) => text.replace(/\n/g, ""));
-    const END_POINT = BASE_URL + "redactions";
+async function getTimeLineRedaction(textList) {
+    const texts = textList.map((text) => text);
+    // console.log(JSON.stringify({
+    //     prompts: texts,
+    // }));
+    const END_POINT = BASE_URL + "redaction";
     try {
         const response = await fetch(END_POINT, {
             method: "POST",
@@ -84,7 +87,6 @@ async function getTimeLineRedaction(texts, user_id) {
             },
             body: JSON.stringify({
                 prompts: texts,
-                user_id: user_id,
             }),
         });
         const data = await response.json();

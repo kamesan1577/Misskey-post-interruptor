@@ -45,8 +45,10 @@ const documentObserver = new MutationObserver((mutations) => {
                         });
                     }
 
+
                     const timeLines = node.querySelectorAll("div.xzSZs.xwehs");
-                    if (timeLines) {
+                    if (timeLines && timeLines.length > 0) {
+                        console.log(timeLines);
                         // timelineの数が変わっていたら
                         if (timeLines.length !== timeLineEditors.length) {
                             timeLineEditors = [];
@@ -69,3 +71,26 @@ documentObserver.observe(document.body, {
     characterData: true,
 });
 
+
+
+const port = chrome.runtime.connect({ name: "time-line" });
+// タイムラインの更新を検知
+port.onMessage.addListener((msg) => {
+    if (msg.message === "ex-note-fetched") {
+        console.log("Note fetched");
+        if (timeLineEditors.length > 0) {
+            timeLineEditors.forEach((timeLineEditor) => {
+                timeLineEditor.updateTimeLine();
+            });
+        }
+    }
+});
+
+//FIXME 初期化時にタイムラインの更新を検知できない
+setTimeout(() => {
+    if (timeLineEditors.length > 0) {
+        timeLineEditors.forEach((timeLineEditor) => {
+            timeLineEditor.updateTimeLine();
+        });
+    }
+}, 1000);

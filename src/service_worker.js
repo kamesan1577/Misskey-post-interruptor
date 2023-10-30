@@ -2,15 +2,14 @@
 const MOCHI_URL = "https://omochifestival.com/api/";
 const IO_URL = "https://misskey.io/api/";
 
-console.log("Hello from service worker");
-chrome.webRequest.onCompleted.addListener(
-    async (details) => {
-        console.log(details);
-        chrome.runtime.sendMessage({ type: "Note fetched", details: details }, function (response) {
-            if (chrome.runtime.lastError) {
-                console.error(chrome.runtime.lastError.message);
-                return;
-            }
-        });
-    }, { urls: [`${MOCHI_URL}*/timeline`] }
-);
+chrome.runtime.onConnect.addListener((port) => {
+    console.assert(port.name === "time-line");
+
+    // webRequest のリスナーを登録
+    chrome.webRequest.onCompleted.addListener(
+        async (details) => {
+            console.log(details);
+            port.postMessage({ message: 'ex-note-fetched' });
+        }, { urls: [`${MOCHI_URL}*/*timeline`] }
+    );
+});
