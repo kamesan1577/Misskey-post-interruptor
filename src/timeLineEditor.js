@@ -19,33 +19,41 @@ const TimeLineEditor = class {
     // }
 
     async updateTimeLine() {
-        // console.log("notes:", this.notes);
-        const notesElements = this.timeLine.querySelectorAll("div.x48yH > span");
-        const newNotesHTML = [...notesElements].map(element => element.innerHTML);
+        try {
+            // console.log("notes:", this.notes);
+            const notesElements = this.timeLine.querySelectorAll("div.x48yH > span");
+            const newNotesHTML = [...notesElements].map(element => element.innerHTML);
 
-        // 更新されたノートのみを抽出
-        const diffNotes = newNotesHTML.filter((note, index) => !this.prevNotes[index] || this.prevNotes[index] !== note);
+            // 更新されたノートのみを抽出
+            const diffNotes = newNotesHTML.filter((note, index) => !this.prevNotes[index] || this.prevNotes[index] !== note);
 
-        this.prevNotes = newNotesHTML;
+            this.prevNotes = newNotesHTML;
 
-        if (diffNotes.length > 0) {
-            const redactedNotes = await this.redact(diffNotes);
+            if (diffNotes.length > 0) {
+                const redactedNotes = await this.redact(diffNotes);
 
-            diffNotes.forEach((originalNote, index) => {
-                const correspondingNoteElementIndex = newNotesHTML.indexOf(originalNote);
-                if (correspondingNoteElementIndex !== -1) {
-                    const noteElement = notesElements[correspondingNoteElementIndex];
-                    const redactedNote = redactedNotes[index];
-                    this.notes.push(new Note(noteElement, originalNote, redactedNote));
-                    noteElement.innerHTML = redactedNote;
-                }
-            });
+                diffNotes.forEach((originalNote, index) => {
+                    const correspondingNoteElementIndex = newNotesHTML.indexOf(originalNote);
+                    if (correspondingNoteElementIndex !== -1) {
+                        const noteElement = notesElements[correspondingNoteElementIndex];
+                        const redactedNote = redactedNotes[index];
+                        this.notes.push(new Note(noteElement, originalNote, redactedNote));
+                        // if (noteElement) {
+                        //     noteElement.innerHTML = redactedNote;
+                        // }
+                    }
+                });
 
-            // notes.forEach((note, index) => {
-            //     const originalHTML = note.innerHTML;
-            //     const modifiedHTML = redactedNotes[index];
-            //     this.notes = [...this.notes, new Note(note, originalHTML, modifiedHTML)];
-            // });
+                // notes.forEach((note, index) => {
+                //     const originalHTML = note.innerHTML;
+                //     const modifiedHTML = redactedNotes[index];
+                //     this.notes = [...this.notes, new Note(note, originalHTML, modifiedHTML)];
+                // });
+            }
+        }
+        catch (error) {
+            console.log(error);
+            throw error;
         }
     }
 
@@ -78,7 +86,7 @@ const TimeLineEditor = class {
         }
         catch (error) {
             console.log(error);
-            alert("エラーが発生しました。しばらくしてから再度お試しください。");
+            throw error;
         }
     }
 }
@@ -91,15 +99,16 @@ const Note = class {
         this.redacted = redacted;
         this.revealed = false;
 
-        if (this.note) {
+        if (this.note && this.original && this.redacted) {
             console.log("note redacted");
-            this.note.innerHTML = this.redacted;
+            if (this.note.innerHTML !== undefined) {
+                this.note.innerHTML = this.redacted;
+                this.note.addEventListener("click", this.handleReveal.bind(this));
+            }
         }
         else {
             console.log("note is null");
         }
-
-        this.note.addEventListener("click", this.handleReveal.bind(this));
 
     }
 
