@@ -46,7 +46,7 @@ const documentObserver = new MutationObserver((mutations) => {
                     }
 
 
-                    const timeLines = node.querySelectorAll("div.xzSZs.xwehs");
+                    const timeLines = node.querySelectorAll("div.xubeM");
                     if (timeLines && timeLines.length > 0) {
                         console.log(timeLines);
                         // timelineの数が変わっていたら
@@ -86,11 +86,11 @@ port.onMessage.addListener((msg) => {
     }
 });
 
-//FIXME 初期化時にタイムラインの更新を検知できない
-setTimeout(() => {
-    if (timeLineEditors.length > 0) {
-        timeLineEditors.forEach((timeLineEditor) => {
-            timeLineEditor.updateTimeLine();
-        });
-    }
-}, 1000);
+// //FIXME 初期化時にタイムラインの更新を検知できない
+// setTimeout(() => {
+//     if (timeLineEditors.length > 0) {
+//         timeLineEditors.forEach((timeLineEditor) => {
+//             timeLineEditor.updateTimeLine();
+//         });
+//     }
+// }, 1000);
