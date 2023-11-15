@@ -95,7 +95,7 @@ async function getTimeLineRedaction(textList) {
     } catch (error) {
         alert("エラーが発生しました。しばらくしてから再度お試しください。");
         console.log(error);
-        return [];
+        throw error;
     }
 }
 
