@@ -26,12 +26,12 @@ const TimeLineEditor = class {
 
             // 更新されたノートのみを抽出
             const diffNotes = newNotesHTML.filter((note, index) => !this.prevNotes[index] || this.prevNotes[index] !== note);
-
+            console.log("diffNotes:", diffNotes);
             this.prevNotes = newNotesHTML;
 
             if (diffNotes.length > 0) {
                 const redactedNotes = await this.redact(diffNotes);
-
+                console.log("redactedNotes:", redactedNotes);
                 diffNotes.forEach((originalNote, index) => {
                     const correspondingNoteElementIndex = newNotesHTML.indexOf(originalNote);
                     if (correspondingNoteElementIndex !== -1) {

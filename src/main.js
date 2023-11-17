@@ -55,6 +55,7 @@ const documentObserver = new MutationObserver((mutations) => {
                             timeLines.forEach((timeLine) => {
                                 timeLineEditors.push(new TimeLineEditor(timeLine));
                             });
+
                             console.log(timeLineEditors);
                         }
                     }
