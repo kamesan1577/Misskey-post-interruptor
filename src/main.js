@@ -46,7 +46,7 @@ const documentObserver = new MutationObserver((mutations) => {
                     }
 
 
-                    const timeLines = node.querySelectorAll("div.xubeM");
+                    const timeLines = node.querySelectorAll("div.xubeM,div.xvu6Q");
                     if (timeLines && timeLines.length > 0) {
                         console.log(timeLines);
                         // timelineの数が変わっていたら
